@@ -1,0 +1,22 @@
+if (location.pathname === '/index.html') history.replaceState(null, '', '/' + location.search + location.hash);
+const tourRoutes = {"isla-familiar": "isla-mujeres-familiar", "isla-adultos": "isla-mujeres-solo-adultos", "chichen-itza": "chichen-itza", "tulum": "tulum-y-coba", "el-cielo": "el-cielo-cozumel", "coco-bongo": "coco-bongo", "isla-contoy": "isla-contoy"};
+// Edita estas tarifas aquí cuando cambien. Usa null para mostrar «Cotizar».
+const tours = [
+  {slug:'isla-familiar',name:'Isla Mujeres Familiar', tag:'CATAMARÁN · FAMILIAR', description:'Navegación, snorkel sujeto al clima, buffet, barra libre, club de playa y tiempo libre. Infantes de 0 a 4 años gratis; menores de 5 a 11; adultos desde los 12. Transporte opcional.', price:'Adulto $850 MXN · menor $450 MXN', image:'imagen/todosbarcos.jpg', alt:'Catamaranes en el mar de Cancún'},
+  {slug:'isla-adultos',name:'Isla Mujeres Solo Adultos', tag:'CATAMARÁN · 18+', description:'Ambiente de fiesta para personas de 18 años en adelante, con navegación, música, bebidas, buffet, snorkel sujeto al clima y tiempo libre en la isla. Transporte opcional.', price:'$900 MXN por persona', image:'imagen/fiesta.jpeg', alt:'Ambiente a bordo del catamarán'},
+  {slug:'chichen-itza',name:'Chichén Itzá y dos cenotes', tag:'CULTURA · YUCATÁN', description:'Chichén Itzá, Yunchen, Xkokay, Valladolid y comida regional. Clásico, Plus o Deluxe.', price:'Nacionales desde $880 MXN', image:'imagen/chichen-piramide.jpeg'},
+  {slug:'tulum',name:'Tulum y Cobá 5 en 1', tag:'CULTURA · CENOTES', description:'Tulum, Cobá, dos cenotes y Puerto Morelos. Elige Clásico o Deluxe.', price:'Nacionales desde $1,150 MXN', image:'imagen/tulum-cenote-caverna.jpeg'},
+  {slug:'el-cielo',name:'El Cielo, Cozumel', tag:'MAR · COZUMEL', description:'Snorkel, El Cielo y El Cielito. Sal desde Playa del Carmen o con transporte desde Cancún.', price:'Desde $800 MXN + ferry', image:'imagen/cielo-barco-mar.jpeg'},
+  {slug:'coco-bongo',name:'Coco Bongo Playa del Carmen', tag:'ESPECTÁCULO · NOCHE', description:'Show, barra libre y opciones Regular, Premium y asientos preferentes. Tarifas por día.', price:'Regular desde $90 USD · promo local $650 MXN', image:'imagen/cocobongo-promo-local.jpeg'},
+  {slug:'isla-contoy',name:'Isla Contoy e Isla Mujeres',tag:'NATURALEZA · CARIBE',description:'Dos islas, snorkel, desayuno, buffet y barra libre. Ocho horas con transporte e impuestos incluidos.',price:'Adultos $2,100 MXN',image:'imagen/contoy-playa.jpeg',alt:'Playa de Isla Contoy'},
+  {name:'Más experiencias', tag:'VIAJA A TU MANERA', description:'Cuéntanos qué tipo de paseo buscas y te ayudamos a revisar las opciones disponibles para tus fechas.', price:null, image:null}
+];
+const cards=document.querySelector('#cards');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const wa=name=>'https://wa.me/529982930766?text='+encodeURIComponent(`Hola Life's Tours, quiero cotizar ${name}. Fecha: [fecha]. Viajeros: [adultos y menores]. ¿Incluye transporte? [sí/no].`);
+cards.innerHTML=tours.map((t,i)=>{const href=t.slug?`/tours/${tourRoutes[t.slug]}/`:wa(t.name);return `<a class="card card-link" href="${href}" ${t.slug?'':'target="_blank" rel="noopener"'} aria-label="${t.slug?'Ver detalles de':'Consultar'} ${esc(t.name)}"><div class="card-media ${t.image?'has-image':''}">${t.image?`<img src="${esc(t.image)}" alt="${esc(t.alt)}" loading="lazy">`:`<span aria-hidden="true">${['✦','◒','✧','≈','✳','☼'][i]}</span>`}<small>0${i+1}</small></div><div class="card-body"><span class="eyebrow">${esc(t.tag)}</span><h3>${esc(t.name)}</h3><p>${esc(t.description)}</p><div class="card-bottom"><strong>${esc(t.price||'Precio a consultar')}</strong><span class="card-action">${t.slug?'Ver experiencia':'Consultar'} <span aria-hidden="true">↗</span></span></div></div></a>`}).join('');
+document.querySelector('#plus-link').href=wa('Plus Experiencia Familiar en catamarán');
+document.querySelector('#year').textContent=new Date().getFullYear();
+const toggle=document.querySelector('.menu-toggle'),nav=document.querySelector('.nav');
+toggle.addEventListener('click',()=>{const open=nav.classList.toggle('open');toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Cerrar menú':'Abrir menú')});
+nav.addEventListener('click',e=>{if(e.target.closest('a')){nav.classList.remove('open');toggle.setAttribute('aria-expanded','false')}});
